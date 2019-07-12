@@ -37,13 +37,10 @@ class image_utils():
             #print(global_feature.shape)
             lista_globals.append(global_feature)
 
-
         #print(lista_globals.shape)
         lista_globals = np.asarray(lista_globals)
         #print(lista_globals.shape)
-
-
-        return lista_globals
+    return lista_globals
 
             
             
