@@ -11,23 +11,29 @@ class image_utils():
 
     def __init__(self):
         pass
-
+    
+    #extracting the features
     def extract_features(self, img_resize):
 
         lista_globals = []
 
         for image in img_resize:
-
+            
+            #Calculating the histogram for arrays.
             hist = cv2.calcHist([image], [0], None, [256], [0,256])
+            #Flattening the images/ histogram or we can say reshapping
             hist = hist.flatten()
-
+            
+            #detecting the edges in an image
             edged = cv2.Canny(image, 200, 250)
+            #reshaping the edges
             edged = edged.flatten()
 
             flat = image.flatten()
-
+            
+            #stacking the arrays into a single array
             global_feature = np.hstack([hist, edged, flat])
-            #global_feature = flat
+            
             #print(global_feature.shape)
             lista_globals.append(global_feature)
 
@@ -46,40 +52,27 @@ class image_utils():
         #coordinate_lists has this format[ [(x1,y1), (x2,y2), (x3,y3), (x4,y4)], [], [] ]
         coordinate_lists = []
         spots_index_list = []
+        
         for i in range(num_space):
             plt.imshow(img, cmap = 'gray', interpolation = 'bicubic')
+            #setting the current tick location
             plt.xticks([]), plt.yticks([])
             #we need 4 points to get rectangle
-            print(" Por favor clique nos 4 pontos da vaga em sentido horario", i)
+            #calculating the click locations of user and storing it
             coordinate = plt.ginput(4)
-            print("Os ponto selecionados são: ", coordinate)
+            print("The clicked coordinates are", coordinate)
             coordinate_lists.append(coordinate)
             spots_index_list.append(i)
+        #closing the figure
         plt.close()
         
         return coordinate_lists
 
 
-    ''' rotaciona imagens '''
+    ''' rotating image '''
     def getRotateRect(img, cooridnate_lists, WIDTH = 100, HEIGHT = 100):
         
-        warped_img_lists = []
-        i = 0 
-        
-        for coordinate in cooridnate_lists :
-            warped = perspective.four_point_transform(img, coordinate)
-            
-            warped_resize = cv2.resize(warped, (WIDTH, HEIGHT), interpolation=cv2.INTER_CUBIC)
-            
-            # plt.imshow(warped, cmap = 'gray', interpolation = 'bicubic')
-            # plt.xticks([]), plt.yticks([])
-            # plt.show()
-            cv2.imshow("Vaga - %d"%i, warped_resize)
-            
-            warped_img_lists.append(warped_resize)
-
-            i+=1
-        return warped_img_lists
+        #Incomplete
 
 
     def load_image_from_path(self, path):
@@ -97,17 +90,16 @@ class image_utils():
 
 
     def load_imagens_keras_with_labels(path):
-        from keras.preprocessing.image import ImageDataGenerator 
-
-        train = ImageDataGenerator()
-        base_train = train.flow_from_directory(path, class_mode='binary')
+        #Incomplete
 
     def transform_image(self, image, WIDTH = 100, HEIGHT = 100):
 
         img = image
-
+        #converting the image
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        img = cv2.GaussianBlur(img, (7, 7), 0)    
+        #blur or smoothen the image
+        img = cv2.GaussianBlur(img, (7, 7), 0)   
+        #resizing the image
         img = cv2.resize(img, (WIDTH, HEIGHT), interpolation=cv2.INTER_CUBIC)
 
         return img
