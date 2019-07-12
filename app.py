@@ -42,7 +42,7 @@ while i < num_frames:
     # Not work yet
 
     if get_point == True:
-        number_of_places = 2 # Defini o numero de vagas que voce ira selecionar 
+        number_of_places = 2
         boxes = image_utils.getSpotsCoordiantesFromImage(frame, number_of_places)
         boxes = asarray(boxes)
         print(boxes)
@@ -53,22 +53,18 @@ while i < num_frames:
         box2 = np.array ([(137.4032258064516, 225.84274193548384), (166.43548387096774, 173.22177419354836), (210.89112903225805, 177.758064516129), (196.375, 226.74999999999994)])
         
         boxes = [box1, box2]
-    #print('afdasdf')
-    #print(box1[0].shape)
+    
 
     img_resize = image_utils.getRotateRect(gau, boxes)
     feature = image_utils().extract_features(img_resize)
 
-    '''feature1 = feature.reshape(-1, 1)
-    score0 = SVM().predict(feature1)
-    score1 = SVM().predict(feature[1])
-
-    print (score0, score1)'''
+    
     timestamp = datetime.datetime.now()
 
     score = SVM().predict(feature)
 
-    if score[0] == 0: 
+    if score[0] == 0:
+        #drawing multiple lines
         cv2.polylines(frame,np.int32([box1]), True ,(0,0,255),2  )
         saida = False
         i = 0
